@@ -1,12 +1,13 @@
 import asyncio
 import random
+import requests
 from gtts import gTTS
 import os
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.types import Message, FSInputFile, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import CommandStart, Command
 from googletrans import Translator
-from config import TOKEN
+from config import TOKEN, WEATHER_API_KEY
 
 # Создаем папку для хранения фотографий, если она не существует
 if not os.path.exists('img'):
@@ -44,6 +45,17 @@ async def help_command(message: Message):
         "/training - Ежедневная мини тренировка",
         reply_markup=keyboard
     )
+def get_weather(city: str):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={WEATHER_API_KEY}&units=metric&lang=ru"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        city = data['name']
+        temp = data['main']['temp']
+        description = data['weather'][0]['description']
+        return f"Погода в городе {city}:\nТемпература: {temp}°C\nОписание: {description}"
+    else:
+        return "Не удалось получить данные о погоде. Проверьте название города."
 
 @router.message(F.photo)
 async def react_photo(message: Message):
