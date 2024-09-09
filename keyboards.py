@@ -1,24 +1,30 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
-main = ReplyKeyboardMarkup(keyboard=[
-   [KeyboardButton(text="Тестовая кнопка 1")],
-   [KeyboardButton(text="Тестовая кнопка 2"), KeyboardButton(text="Тестовая кнопка 3")]
-], resize_keyboard=True)
+# Основное меню
+main_menu = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="Привет")],
+        [KeyboardButton(text="Пока")]
+    ],
+    resize_keyboard=True
+)
 
-inline_keyboard_test = InlineKeyboardMarkup(inline_keyboard=[
-   [InlineKeyboardButton(text="Каталог", callback_data='catalog')],
-   [InlineKeyboardButton(text="Новости", callback_data='news')],
-   [InlineKeyboardButton(text="Профиль", callback_data='person')]
+# Инлайн-клавиатура с URL-ссылками
+url_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Новости", url='https://www.rbc.ru/')],
+    [InlineKeyboardButton(text="Музыка", url='https://music.yandex.ru/')],
+    [InlineKeyboardButton(text="Видео", url='https://hd.kinopoisk.ru/')]
 ])
 
-test = ["кнопка 1", "кнопка 2", "кнопка 3", "кнопка 4"]
+# Динамическая клавиатура
+dynamic_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Показать больше", callback_data='show_more')]
+])
 
-async def test_keyboard():
-   keyboard = InlineKeyboardBuilder()
-   for key in test:
-       keyboard.add(InlineKeyboardButton(text=key, url='https://www.youtube.com/watch?v=HfaIcB4Ogxk'))
-   return keyboard.adjust(2).as_markup()
-
-
+# Функция для создания опций
+def create_options():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Опция 1", callback_data='option_1')],
+        [InlineKeyboardButton(text="Опция 2", callback_data='option_2')]
+    ])
